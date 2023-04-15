@@ -15,12 +15,12 @@ import { zValidator } from "@hono/zod-validator";
 import * as jose from "jose";
 import { Bindings } from "hono/dist/types/types";
 import faunadb from "faunadb";
+const { Call, Function, Paginate, Match, Index, Lambda, Get, Var, Map } =
+    faunadb.query;
 
 const faunaClient = new faunadb.Client({
   secret: "fnAFBncQWJAASbTQJZ9EssnEJxiaKKln11deXGwR",
 });
-const { Call, Function, Paginate, Match, Index, Lambda, Get, Var, Map } =
-  faunadb.query;
 
 const app = new Hono<{ Bindings: Bindings }>();
 
