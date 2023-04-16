@@ -22,7 +22,7 @@ const faunaClient = new faunadb.Client({
   secret: "fnAFBncQWJAASbTQJZ9EssnEJxiaKKln11deXGwR",
 });
 
-async function getStudentClasses(c) {
+export async function getStudentClasses(c) {
     try { 
         const { username } = await c.req.query();
 
@@ -38,7 +38,7 @@ async function getStudentClasses(c) {
 }
 
 
-async function addStudentClassForUser(c) {
+export async function addStudentClassForUser(c) {
     const data = await c.req.json();
 
     try {
@@ -52,7 +52,7 @@ async function addStudentClassForUser(c) {
 
 }
 
-async function createUser(c) {
+export async function createUser(c) {
     const data = await c.req.json();
     try{
         const result = await faunaClient.query(
@@ -64,7 +64,7 @@ async function createUser(c) {
     }
 }
 
-async function addInstructorClassForUser(c) {
+export async function addInstructorClassForUser(c) {
     const data = await c.req.json();
     try{
         const result = await faunaClient.query(
@@ -76,7 +76,7 @@ async function addInstructorClassForUser(c) {
     }
 }
 
-async function deleteUser(c) {
+export async function deleteUser(c) {
     const data = await c.req.json();
     try{
         const result = await faunaClient.query(
