@@ -23,7 +23,7 @@ const faunaClient = new faunadb.Client({
 
 // GET session from reference ID
 export async function getSession(c) {
-    const ref = c.req.header("ref");
+    const ref = await c.req.header("ref");
 
     try {
         const result = await faunaClient.query(
@@ -37,12 +37,13 @@ export async function getSession(c) {
 
 // CREATE a new session
 export async function postSession(c) {
-    const data = c.req.json();
+    const data = await c.req.json();
+    console.log(data);
     try {
         const result = await faunaClient.query(
             Call(Function("createSession"), data.ref, data.classID, data.title, data.Start, data.End, data.Instructor)
         );
-        return c.json(result);
+        return c.text("Complete");
     } catch(e) {
         return c.json(e);
     }
@@ -50,12 +51,12 @@ export async function postSession(c) {
 
 // UPDATE sesssion
 export async function putSession(c) {
-    const data = c.req.json();
+    const data = await c.req.json();
     try {
         const result = await faunaClient.query(
             Call(Function("updateSession"), data.ref, data.classID, data.title, data.Start, data.End, data.Instructor)
         );
-        return c.json(result);
+        return c.text("Complete");
     } catch(e) {
         return c.json(e);
     }
@@ -64,12 +65,12 @@ export async function putSession(c) {
 
 // ADD instructor to the session
 export async function addInstructor(c) {
-    const data = c.req.json();
+    const data = await c.req.json();
     try {
         const result = await faunaClient.query(
-            Call(Function("addInstructorToSession"), data.ref, data.instructor)
+            Call(Function("addInstructorToSession"), data.ref, data.Instructor)
         )
-        return c.json(result);
+        return c.text("Complete");
     } catch(e) {
         return c.json(e);
     }
@@ -77,12 +78,12 @@ export async function addInstructor(c) {
 
 // DELETE the session
 export async function deleteSession(c) {
-    const { ref } = c.req.query();
+    const ref = await c.req.header("ref");
     try {
         const result = faunaClient.query(
             Call(Function("deleteSession"), ref)
         )
-        return c.json(result);
+        return c.text("Complete");
     } catch (e) {
         return c.json(e);
     }

@@ -24,16 +24,30 @@ const faunaClient = new faunadb.Client({
 
 export async function getStudentsByClass(c) {
     try { 
-        const { username } = await c.req.header("username");
+        const class_id = await c.req.header("class");
 
         // try to query database:
         const result = await faunaClient.query(
-            Call(Function("getStudentsByClass"), username)
+            Call(Function("getStudentsByClass"), class_id)
         );
         // send response
         return c.json(result);
     } catch (e) {
         return c.json(e);
+    }
+}
+
+// returns all instructors in the class
+export async function getInstructorsInClass(c) {
+    try {
+        const class_id = await c.req.header("class");
+        const result = await faunaClient.query(
+            Call(Function("getInstructorsByClass"), class_id)
+        );
+        console.log(result);
+        return c.json(result);
+    } catch (e) {
+        c.json(e);
     }
 }
 
@@ -43,7 +57,7 @@ export async function addStudentClassForUser(c) {
 
     try {
         const result = await faunaClient.query(
-            Call(Function("addStudentClassForUser", data.ref, data.classID))
+            Call(Function("addStudentClassForUser"), data.ref, data.class_id)
         );
         return c.json(result);
     } catch(e) {
@@ -56,7 +70,7 @@ export async function createUser(c) {
     const data = await c.req.json();
     try{
         const result = await faunaClient.query(
-            Call(Function("createUser", data.ref, data.username, data.isAdmin))
+            Call(Function("createUser"), data.ref, data.username, data.isAdmin)
         );
         return c.json(result);
     } catch(e) {
@@ -68,10 +82,23 @@ export async function addInstructorClassForUser(c) {
     const data = await c.req.json();
     try{
         const result = await faunaClient.query(
-            Call(Function("addInstructorClassForUser", data.ref, data.classID, data.isAdmin))
+            Call(Function("addInstructorClassForUser"), data.ref, data.classID, data.isAdmin)
         );
         return c.json(result);
     } catch(e) {
+        return c.json(e);
+    }
+}
+
+export async function getEstimatedWaitTime(c) {
+    const session_id = await c.req.header("session_id");
+    try{
+        const result = await faunaClient.query(
+            Call(Function("getEstimatedWaitTime"), session_id)
+        );
+        return c.json(result);
+    }
+    catch(e) {
         return c.json(e);
     }
 }
@@ -80,7 +107,7 @@ export async function deleteUser(c) {
     const data = await c.req.json();
     try{
         const result = await faunaClient.query(
-            Call(Function("deleteUser", data.ref))
+            Call(Function("deleteUser"), data.ref)
         );
         return c.json(result);
     }
