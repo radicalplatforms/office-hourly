@@ -39,6 +39,8 @@ export async function getActiveQueue(c) {
     }
 }
 
+
+  
 // Fetches all students currently with TAs
 // @param:session {string}
 // @returns {array} array of student objects
@@ -73,6 +75,39 @@ export async function getMyCurrentStudent(c) {
     return c.json(e);
   }
 };
+
+/**
+* Sets limits for what a valid input is 
+*for a post request
+*/
+
+const createTicketSchema = z.object({
+  ref: z
+    .string()
+    .trim()
+    .regex(/^[0-9]+$/, {
+      message: "Ref must be a number",
+    }),
+  username: z
+    .string()
+    .trim()
+    .regex(/^[a-zA-Z0-9_]+$/, {
+      message: "Username can only contain letters, numbers, and underscores",
+    })
+    .min(6, { message: "Username must be 6-24 characters long" })
+    .max(24, { message: "Username must be 6-24 characters long" }),
+  sessionID: z
+    .string()
+    .trim()
+    .regex(/^[0-9]+$/, {
+      message: "SessionID must be a number",
+    }),
+  position: z
+    .number()
+    .max(100, { message: "position must be 100 or smalller" }),
+  time: z.string(),
+});
+  
 
 // Add student to the queue
 // @param:ref {string}
