@@ -108,7 +108,7 @@ async function acceptStudentTicket (c) {
 
 // Deletes a ticket by reference
 // @param:query ref - unique id of the ticket to delete
-app.delete("/tickets", async (c) => {
+async function deleteTicket(c) {
 
     const { ref } = await c.req.json();
     
