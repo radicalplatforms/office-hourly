@@ -4,7 +4,7 @@
     <Dialog
       as="div"
       class="relative z-50 xl:hidden"
-      @close="sidebarOpen = false"
+      @close="emit('closeSidebar')"
     >
       <TransitionChild
         as="template"
@@ -44,7 +44,7 @@
                 <button
                   type="button"
                   class="-m-2.5 p-2.5"
-                  @click="sidebarOpen = false"
+                  @click="emit('closeSidebar')"
                 >
                   <span class="sr-only">Close sidebar</span>
                   <XMarkIcon class="h-6 w-6 text-neutral" aria-hidden="true" />
@@ -72,4 +72,6 @@ const props = defineProps({
   userAuthor: Object,
   sidebarOpen: Boolean,
 });
+
+const emit = defineEmits(["closeSidebar"]);
 </script>
