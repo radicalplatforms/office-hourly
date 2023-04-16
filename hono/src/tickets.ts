@@ -81,7 +81,7 @@ export async function getMyCurrentStudent(c) {
 *for a post request
 */
 
-const createTicketSchema = z.object({
+export const ticketSchema = z.object({
   ref: z
     .string()
     .trim()
