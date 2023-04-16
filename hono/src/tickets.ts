@@ -121,5 +121,5 @@ async function deleteTicket(c) {
     } catch (e) {
         return c.json(e);
     }
-});
+};
 
