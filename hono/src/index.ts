@@ -52,7 +52,7 @@ app.delete('/classes', deleteClasses);
 app.get('/users', getStudentsByClass);
 app.get('/users/instructor', getInstructorsInClass);
 app.put('/users/student', addStudentClassForUser);
-app.post('/users', zValidator("json", userSchema), createUser);
+app.post('/users', createUser);
 app.put('/users/instructor', addInstructorClassForUser);
 app.get('/users/time', getEstimatedWaitTime);
 app.delete('/users', deleteUser);
