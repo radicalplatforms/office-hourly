@@ -53,7 +53,24 @@ export async function putClasses(c) {
 
 }
 
-
+export const classSchema = z.object({
+    ref: z
+      .string()
+      .trim()
+      .regex(/^[0-9]+$/, {
+        message: "Ref must be a number",
+      }),
+    title: z
+      .string()
+      .trim()
+      .min(1, { message: "Title is required" })
+      .max(255, { message: "Title must be 50 characters or fewer" }),
+    number: z
+      .string()
+      .trim()
+      .max(5, { message: "Number must be 5 numbers or fewer" })
+  });
+  
 export async function postClasses(c) {
     const username = c.req.header("username");
     // const ref = c.req.header("ref");
