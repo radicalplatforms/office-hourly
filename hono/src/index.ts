@@ -19,7 +19,7 @@ import faunadb from "faunadb";
 import {classSchema, getClasses, putClasses, postClasses, deleteClasses } from "./classes";
 import {userSchema, getStudentsByClass, addStudentClassForUser, createUser, addInstructorClassForUser, getEstimatedWaitTime, deleteUser, getInstructorsInClass} from "./users";
 import {sessionSchema, getSession, postSession, putSession, addInstructor, deleteSession} from "./sessions";
-import {ticketSchema, getActiveQueue, getCurrentStudents, getMyCurrentStudent, createTicket, acceptStudentTicket, deleteTicket} from "./tickets";
+import {acceptStudentTicketSchema, ticketSchema, getActiveQueue, getCurrentStudents, getMyCurrentStudent, createTicket, acceptStudentTicket, deleteTicket} from "./tickets";
 const { Call, Function, Paginate, Match, Index, Lambda, Get, Var, Map } =
     faunadb.query;
 
@@ -67,7 +67,7 @@ app.get('/tickets',getActiveQueue);
 app.get('/tickets/students', getCurrentStudents);
 app.get('/tickets/current', getMyCurrentStudent);
 app.post('/tickets', zValidator("json", ticketSchema), createTicket);
-app.put('/tickets', acceptStudentTicket);
+app.put('/tickets', zValidator("json", acceptStudentTicketSchema), acceptStudentTicket);
 app.delete('/tickets', deleteTicket);
 
 
