@@ -22,7 +22,7 @@ const faunaClient = new faunadb.Client({
 });
 
 // GET session from reference ID
-async function getSession(c) {
+export async function getSession(c) {
     const { ref } = c.req.query();
 
     try {
@@ -35,7 +35,7 @@ async function getSession(c) {
 }
 
 // CREATE a new session
-async function postSession(c) {
+export async function postSession(c) {
     const data = c.req.json();
     try {
         const result = await faunaClient.query(
@@ -48,7 +48,7 @@ async function postSession(c) {
 }
 
 // UPDATE sesssion
-async function putSession(c) {
+export async function putSession(c) {
     const data = c.req.json();
     try {
         const result = await faunaClient.query(
@@ -62,7 +62,7 @@ async function putSession(c) {
 
 
 // ADD instructor to the session
-async function addInstructor(c) {
+export async function addInstructor(c) {
     const data = c.req.json();
     try {
         const result = await faunaClient.query(
@@ -75,7 +75,7 @@ async function addInstructor(c) {
 }
 
 // DELETE the session
-async function deleteSession(c) {
+export async function deleteSession(c) {
     const { ref } = c.req.query();
     try {
         const result = faunaClient.query(
