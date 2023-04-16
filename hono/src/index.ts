@@ -18,6 +18,7 @@ import faunadb from "faunadb";
 import {getClasses, putClasses, postClasses, deleteClasses } from "./classes";
 import {getStudentClasses, addStudentClassForUser, createUser, addInstructorClassForUser, deleteUser} from "./users";
 import {getSession, postSession, putSession, addInstructor, deleteSession} from "./sessions";
+import {getActiveQueue, getCurrentStudents, getMyCurrentStudent, createTicket, acceptStudentTicket, deleteTicket} from "./tickets";
 const { Call, Function, Paginate, Match, Index, Lambda, Get, Var, Map } =
     faunadb.query;
 
@@ -49,7 +50,12 @@ app.post('/sessions', postSession);
 app.put('/sessions/instructor', addInstructor);
 app.delete('/sessions', deleteSession);
 
-
+app.get('/tickets',getActiveQueue);
+app.get('/tickets/students', getCurrentStudents);
+app.get('/tickets/current', getMyCurrentStudent);
+app.post('/tickets', createTicket);
+app.put('/tickets', acceptStudentTicket);
+app.delete('/tickets', deleteTicket);
 
 
 

@@ -97,7 +97,7 @@ export async function createTicket(c) {
 // @param:ref {string}  reference to Ticket
 // @param:instructor {string} TA username
 // @returns {object} ticket object
-export async function acceptStudentTicket (c) {
+export async function acceptStudentTicket(c) {
   const { ref, instructor } = await c.req.json();
 
   try {
