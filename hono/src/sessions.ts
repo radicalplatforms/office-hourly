@@ -122,7 +122,7 @@ export const addInstructorSchema = z.object({
       .regex(/^[0-9]+$/, {
         message: "Ref must be a number",
       }),
-    Instructor: z.string().min(6).max(24),
+    instructor: z.string().min(6).max(24),
 });
 
 // ADD instructor to the session
