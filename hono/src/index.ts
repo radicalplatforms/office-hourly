@@ -18,7 +18,7 @@ import { Bindings } from "hono/dist/types/types";
 import faunadb from "faunadb";
 import {getClasses, putClasses, postClasses, deleteClasses } from "./classes";
 import {getStudentsByClass, addStudentClassForUser, createUser, addInstructorClassForUser, getEstimatedWaitTime, deleteUser, getInstructorsInClass} from "./users";
-import {getSession, postSession, putSession, addInstructor, deleteSession} from "./sessions";
+import {sessionSchema, getSession, postSession, putSession, addInstructor, deleteSession} from "./sessions";
 import {ticketSchema, getActiveQueue, getCurrentStudents, getMyCurrentStudent, createTicket, acceptStudentTicket, deleteTicket} from "./tickets";
 const { Call, Function, Paginate, Match, Index, Lambda, Get, Var, Map } =
     faunadb.query;
@@ -52,14 +52,14 @@ app.delete('/classes', deleteClasses);
 app.get('/users', getStudentsByClass);
 app.get('/users/instructor', getInstructorsInClass);
 app.put('/users/student', addStudentClassForUser);
-app.post('/users', zValidator("json", userSchema), createUser);
+app.post('/users', createUser);
 app.put('/users/instructor', addInstructorClassForUser);
 app.get('/users/time', getEstimatedWaitTime);
 app.delete('/users', deleteUser);
 
 app.get('/sessions', getSession);
 app.put('/sessions', putSession);
-app.post('/sessions', postSession);
+app.post('/sessions', zValidator("json", sessionSchema), postSession);
 app.put('/sessions/instructor', addInstructor);
 app.delete('/sessions', deleteSession);
 
