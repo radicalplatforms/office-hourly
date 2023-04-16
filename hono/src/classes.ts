@@ -26,8 +26,7 @@ const faunaClient = new faunadb.Client({
 
 export async function getClasses(c) {
     try { 
-        const { username } = await c.req.query();
-
+        const username = await c.req.header("username");
         // try to query database:
         const result = await faunaClient.query(
             Call(Function("getStudentClasses"), username)
