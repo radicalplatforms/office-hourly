@@ -12,11 +12,11 @@ export default defineNuxtConfig({
       urlBase: {
         front:
           process.env.NODE_ENV == "production"
-            ? "https://office-hourly.com"
+            ? "https://oh-hono.rakerman.workers.dev"
             : "http://localhost:3000",
         back:
           process.env.NODE_ENV == "production"
-            ? "https://api.office-hourly.com"
+            ? "https://oh-nuxt.rakerman.workers.dev"
             : "http://localhost:8787",
       },
       meta: {
