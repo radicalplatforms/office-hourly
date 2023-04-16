@@ -17,7 +17,7 @@ import * as jose from "jose";
 import { Bindings } from "hono/dist/types/types";
 import faunadb from "faunadb";
 import {classSchema, getClasses, putClasses, postClasses, deleteClasses } from "./classes";
-import {userSchema, getStudentsByClass, addStudentClassForUser, createUser, addInstructorClassForUser, getEstimatedWaitTime, deleteUser, getInstructorsInClass} from "./users";
+import {userSchema, addStudentuserSchema, addInstructoruserSchema, getStudentsByClass, addStudentClassForUser, createUser, addInstructorClassForUser, getEstimatedWaitTime, deleteUser, getInstructorsInClass} from "./users";
 import {sessionSchema, getSession, postSession, putSession, addInstructor, deleteSession} from "./sessions";
 import {ticketSchema, getActiveQueue, getCurrentStudents, getMyCurrentStudent, createTicket, acceptStudentTicket, deleteTicket} from "./tickets";
 const { Call, Function, Paginate, Match, Index, Lambda, Get, Var, Map } =
@@ -51,9 +51,9 @@ app.delete('/classes', deleteClasses);
 
 app.get('/users', getStudentsByClass);
 app.get('/users/instructor', getInstructorsInClass);
-app.put('/users/student', addStudentClassForUser);
+app.put('/users/student', zValidator("json", addStudentuserSchema), addStudentClassForUser);
 app.post('/users', zValidator("json", userSchema), createUser);
-app.put('/users/instructor', addInstructorClassForUser);
+app.put('/users/instructor', zValidator("json", addInstructoruserSchema), addInstructorClassForUser);
 app.get('/users/time', getEstimatedWaitTime);
 app.delete('/users', deleteUser);
 

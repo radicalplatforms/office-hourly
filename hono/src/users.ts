@@ -51,6 +51,20 @@ export async function getInstructorsInClass(c) {
     }
 }
 
+export const addStudentuserSchema = z.object({
+    ref: z
+      .string()
+      .trim()
+      .regex(/^[0-9]+$/, {
+        message: "Ref must be a number",
+      }),
+    class_id: z
+        .string()
+        .trim()
+        .regex(/^[0-9]+$/, {
+            message: "Class ID must be a number",
+        }),
+  });
 
 export async function addStudentClassForUser(c) {
     const data = await c.req.json();
@@ -95,6 +109,22 @@ export async function createUser(c) {
         return c.json(e);
     }
 }
+
+export const addInstructoruserSchema = z.object({
+    ref: z
+      .string()
+      .trim()
+      .regex(/^[0-9]+$/, {
+        message: "Ref must be a number",
+      }),
+    class_id: z
+        .string()
+        .trim()
+        .regex(/^[0-9]+$/, {
+            message: "Class ID must be a number",
+        }),
+    isAdmin: z.boolean(),
+  });
 
 export async function addInstructorClassForUser(c) {
     const data = await c.req.json();
