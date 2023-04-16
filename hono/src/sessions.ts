@@ -23,7 +23,7 @@ const faunaClient = new faunadb.Client({
 
 // GET session from reference ID
 export async function getSession(c) {
-    const { ref } = c.req.query();
+    const ref = c.req.header("ref");
 
     try {
         const result = await faunaClient.query(
