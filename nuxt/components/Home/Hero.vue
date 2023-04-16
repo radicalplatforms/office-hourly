@@ -1,5 +1,5 @@
 <template>
-  <div class="relative isolate overflow-hidden bg-white">
+  <div class="relative isolate bg-white">
     <svg
       class="absolute inset-0 -z-10 h-full w-full stroke-gray-200 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
       aria-hidden="true"
@@ -23,15 +23,13 @@
         fill="url(#0787a7c5-978c-4f66-83c7-11c213f99cb7)"
       />
     </svg>
-    <div
-      class="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-40"
-    >
+    <div class="mx-auto max-w-7xl px-6 pt-10 lg:flex lg:px-8 lg:pt-40 pb-8">
       <div
         class="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl lg:flex-shrink-0 lg:pt-8"
       >
         <img
           class="h-8"
-          src="https://imagedelivery.net/5zM6Rdl2uV8Hmr9WxRh20g/80b2def0-afb9-4d3f-b7f7-48c1a7006800/md"
+          src="https://imagedelivery.net/5zM6Rdl2uV8Hmr9WxRh20g/c10b6a16-2e38-4690-6ca1-97fa09ae2500/md"
           alt=""
         />
         <div class="mt-24 sm:mt-32 lg:mt-16">
@@ -57,8 +55,12 @@
           Hold your office hours with confidence
         </h1>
         <p class="mt-6 text-lg leading-8 text-accent">
-          Ditch Google Sheets. Streamline how you hold office hours with a
-          simple and intuitive platform built by TA's for TA's.
+          Ditch Google Sheets. Leverage our platform's tailored features to help
+          you streamline your office hours experience.
+        </p>
+        <p class="mt-2 text-lg leading-8 text-accent">
+          Let's create a community of learning that is efficient, effective, and
+          most importantly, fun.
         </p>
         <div class="mt-10 flex items-center gap-x-6">
           <NuxtLink
@@ -80,7 +82,7 @@
             class="-m-2 rounded-xl bg-neutral/5 p-2 ring-1 ring-inset ring-neutral/10 lg:-m-4 lg:rounded-2xl lg:p-4"
           >
             <img
-              src="https://tailwindui.com/img/component-images/project-app-screenshot.png"
+              src="https://imagedelivery.net/5zM6Rdl2uV8Hmr9WxRh20g/ba4d9026-1a20-4272-1e91-95a5df85bb00/2xl"
               alt="App screenshot"
               width="2432"
               height="1442"

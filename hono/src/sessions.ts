@@ -17,6 +17,7 @@ import { Bindings } from "hono/dist/types/types";
 import faunadb from "faunadb";
 
 import { customAlphabet } from "nanoid";
+import { retrieveUserReference } from "./classes";
 const { Call, Function } = faunadb.query;
 
 const nanoid = customAlphabet("1234567890", 6);
@@ -27,11 +28,39 @@ const faunaClient = new faunadb.Client({
 
 // GET session from reference ID
 export async function getSession(c) {
-  const ref = await c.req.header("ref");
+  // get user ref from user Authentication
+  const ref = await retrieveUserReference(c.req.header("Authorization"));
 
   try {
-    const result = await faunaClient.query(Call(Function("getSession"), ref));
-    return c.json(result);
+    const result = await faunaClient.query(
+      Call(Function("getAllUserSessions"), ref)
+    );
+
+    console.log(JSON.stringify(result[0]));
+
+    let payload = [];
+    for (let i = 0; i < result.length; i++) {
+      payload[i] = {
+        data: result[i].data,
+        ref: result[i].ref,
+        instructors: [],
+      };
+      for (let j = 0; j < result[i].data.Instructors.length; j++) {
+        // console.log(result[i].data.username);
+        const response = await fetch(
+          "https://api.author.rakerman.com/api/rf/user/" +
+            result[i].data.Instructors[j],
+          {
+            method: "GET",
+            headers: { Authorization: "69ODR2OsRk64IqIUg2" },
+          }
+        );
+        const data = await response.json();
+        payload[i].instructors[j] = data;
+      }
+    }
+
+    return c.json(payload);
   } catch (e) {
     return c.json(e);
   }
@@ -54,9 +83,7 @@ export const sessionSchema = z.object({
     .regex(/^[0-9]+$/, {
       message: "Class ID must be a number",
     }),
-  title: z.string().min(2, {
-    message: "Title must be at least 2 characters long",
-  }),
+  title: z.string(),
   start: z.string(), // string().datetime(),
   end: z.string(), // string().datetime(),
   instructors: z.array(

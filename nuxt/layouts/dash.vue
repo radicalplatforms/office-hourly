@@ -12,8 +12,8 @@
     <!-- Desktop Sidebar -->
     <SidebarBody
       :classes="classes"
-      :sessions="classes"
-      :tickets="classes"
+      :sessions="sessions"
+      :tickets="tickets"
       :userAuthor="userAuthor"
       class="hidden xl:fixed xl:inset-y-0 xl:z-50 xl:flex xl:w-72 xl:flex-col"
     />
@@ -44,7 +44,29 @@ const { data: classes } = await useFetch("/classes", {
   },
 });
 
+const { data: sessions } = await useFetch("/sessions", {
+  method: "GET",
+  server: false, // not to Nitro
+  baseURL: config.urlBase.back, // backend url
+  headers: {
+    // auth headers
+    Authorization: "Bearer " + token,
+  },
+});
+
+const { data: tickets } = await useFetch("/tickets/all", {
+  method: "GET",
+  server: false, // not to Nitro
+  baseURL: config.urlBase.back, // backend url
+  headers: {
+    // auth headers
+    Authorization: "Bearer " + token,
+  },
+});
+
 console.log(classes);
+console.log(sessions);
+console.log(tickets);
 
 const sidebarOpen = ref(false);
 </script>

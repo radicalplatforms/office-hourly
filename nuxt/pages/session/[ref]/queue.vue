@@ -13,7 +13,9 @@
                 <h3 class="text-base font-medium text-neutral">
                   Position in Queue
                 </h3>
-                <h1 class="mt-2 text-4xl font-medium text-neutral">#21</h1>
+                <h1 class="mt-2 text-4xl font-medium text-neutral">
+                  #{{ session.position }}
+                </h1>
                 <p class="mt-3 text-sm text-accent">
                   Sit tight. You'll be meeting with your instructor soon. Keep
                   an eye on this tab, right before it's your turn, we'll send a
@@ -123,7 +125,7 @@ const session = {
   end: "2021-08-30T19:00:00.000Z",
   status: "live",
   action: "Join",
-  step: 0,
-  position: 0,
+  step: 2,
+  position: 1,
 };
 </script>

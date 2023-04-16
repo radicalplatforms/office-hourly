@@ -16,12 +16,48 @@ import { zValidator } from "@hono/zod-validator";
 import * as jose from "jose";
 import { Bindings } from "hono/dist/types/types";
 import faunadb from "faunadb";
-import {classSchema, getClasses, putClasses, postClasses, deleteClasses } from "./classes";
-import {userSchema, addStudentuserSchema, addInstructoruserSchema, getStudentsByClass, addStudentClassForUser, createUser, addInstructorClassForUser, getEstimatedWaitTime, deleteUser, getInstructorsInClass} from "./users";
-import {putSessionSchema, addInstructorSchema, sessionSchema, getSession, postSession, putSession, addInstructor, deleteSession} from "./sessions";
-import {acceptStudentTicketSchema, ticketSchema, getActiveQueue, getCurrentStudents, getMyCurrentStudent, createTicket, acceptStudentTicket, deleteTicket} from "./tickets";
+import {
+  classSchema,
+  getClasses,
+  putClasses,
+  postClasses,
+  deleteClasses,
+} from "./classes";
+import {
+  userSchema,
+  addStudentuserSchema,
+  addInstructoruserSchema,
+  getStudentsByClass,
+  addStudentClassForUser,
+  createUser,
+  addInstructorClassForUser,
+  getEstimatedWaitTime,
+  deleteUser,
+  getInstructorsInClass,
+} from "./users";
+import {
+  putSessionSchema,
+  addInstructorSchema,
+  sessionSchema,
+  getSession,
+  postSession,
+  putSession,
+  addInstructor,
+  deleteSession,
+} from "./sessions";
+import {
+  acceptStudentTicketSchema,
+  ticketSchema,
+  getActiveQueue,
+  getCurrentStudents,
+  getMyCurrentStudent,
+  createTicket,
+  acceptStudentTicket,
+  deleteTicket,
+  getAllTickets,
+} from "./tickets";
 const { Call, Function, Paginate, Match, Index, Lambda, Get, Var, Map } =
-    faunadb.query;
+  faunadb.query;
 
 const faunaClient = new faunadb.Client({
   secret: "fnAFBncQWJAASbTQJZ9EssnEJxiaKKln11deXGwR",
@@ -44,32 +80,47 @@ app.use(
 app.get("/", (c) => c.text("OH! API v1.0.0"));
 
 // CLASSES REQUESTS:
-app.get('/classes', getClasses);
-app.put('/classes', putClasses);
-app.post('/classes', zValidator("json", classSchema), postClasses);
-app.delete('/classes', deleteClasses);
+app.get("/classes", getClasses);
+app.put("/classes", putClasses);
+app.post("/classes", zValidator("json", classSchema), postClasses);
+app.delete("/classes", deleteClasses);
 
-app.get('/users', getStudentsByClass);
-app.get('/users/instructor', getInstructorsInClass);
-app.put('/users/student', zValidator("json", addStudentuserSchema), addStudentClassForUser);
-app.post('/users', zValidator("json", userSchema), createUser);
-app.put('/users/instructor', zValidator("json", addInstructoruserSchema), addInstructorClassForUser);
-app.get('/users/time', getEstimatedWaitTime);
-app.delete('/users', deleteUser);
+app.get("/users", getStudentsByClass);
+app.get("/users/instructor", getInstructorsInClass);
+app.put(
+  "/users/student",
+  zValidator("json", addStudentuserSchema),
+  addStudentClassForUser
+);
+app.post("/users", zValidator("json", userSchema), createUser);
+app.put(
+  "/users/instructor",
+  zValidator("json", addInstructoruserSchema),
+  addInstructorClassForUser
+);
+app.get("/users/time", getEstimatedWaitTime);
+app.delete("/users", deleteUser);
 
-app.get('/sessions', getSession);
-app.put('/sessions', zValidator("json", putSessionSchema), putSession);
-app.post('/sessions', zValidator("json", sessionSchema), postSession);
-app.put('/sessions/instructor', zValidator("json", addInstructorSchema), addInstructor);
-app.delete('/sessions', deleteSession);
+app.get("/sessions", getSession);
+app.put("/sessions", zValidator("json", putSessionSchema), putSession);
+app.post("/sessions", zValidator("json", sessionSchema), postSession);
+app.put(
+  "/sessions/instructor",
+  zValidator("json", addInstructorSchema),
+  addInstructor
+);
+app.delete("/sessions", deleteSession);
 
-app.get('/tickets',getActiveQueue);
-app.get('/tickets/students', getCurrentStudents);
-app.get('/tickets/current', getMyCurrentStudent);
-app.post('/tickets', zValidator("json", ticketSchema), createTicket);
-app.put('/tickets', zValidator("json", acceptStudentTicketSchema), acceptStudentTicket);
-app.delete('/tickets', deleteTicket);
-
-
+app.get("/tickets", getActiveQueue);
+app.get("/tickets/all", getAllTickets);
+app.get("/tickets/students", getCurrentStudents);
+app.get("/tickets/current", getMyCurrentStudent);
+app.post("/tickets", zValidator("json", ticketSchema), createTicket);
+app.put(
+  "/tickets",
+  zValidator("json", acceptStudentTicketSchema),
+  acceptStudentTicket
+);
+app.delete("/tickets", deleteTicket);
 
 export default app;

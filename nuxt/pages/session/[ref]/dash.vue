@@ -9,62 +9,7 @@
 
   <!-- Sessions list -->
   <ul role="list" class="divide-y divide-accent/5">
-    <li
-      v-for="session in sessions"
-      :key="session.id"
-      class="relative flex items-center space-x-4 px-4 py-4 sm:px-6 lg:px-8"
-    >
-      <div class="min-w-0 flex-auto">
-        <div class="flex items-center gap-x-2">
-          <div
-            :class="[statuses[session.status], 'flex-none rounded-full p-1']"
-          >
-            <div class="h-2 w-2 rounded-full bg-current" />
-          </div>
-          <h2 class="min-w-0 text-sm font-semibold leading-6 text-neutral">
-            <NuxtLink :to="'/session/' + session.ref" class="flex gap-x-2">
-              <span class="truncate">
-                {{ session.title === "" ? "General OH" : session.title }}
-                <span class="text-accent">w/</span>
-                {{
-                  session.instructors
-                    .map(function (val) {
-                      return val.first + " " + val.last;
-                    })
-                    .join(", ")
-                }}
-              </span>
-              <span class="absolute inset-0" />
-            </NuxtLink>
-          </h2>
-        </div>
-        <div class="mt-1 flex items-center text-xs leading-5 text-accent">
-          <p class="truncate">
-            {{
-              DateTime.fromISO(session.start).toLocaleString(
-                DateTime.DATETIME_MED
-              )
-            }}
-            to
-            {{
-              DateTime.fromISO(session.end).toLocaleString(DateTime.TIME_SIMPLE)
-            }}
-          </p>
-        </div>
-      </div>
-      <div
-        :class="[
-          actions[session.action],
-          'rounded-full flex-none py-1 px-2 text-xs font-medium ring-1 ring-inset',
-        ]"
-      >
-        {{ session.action }}
-      </div>
-      <ChevronRightIcon
-        class="h-5 w-5 flex-none text-accent"
-        aria-hidden="true"
-      />
-    </li>
+    <Session :sessions="filteredSessions" hideAction />
   </ul>
 
   <!-- Stats -->
@@ -183,6 +128,7 @@ definePageMeta({
 });
 
 const config = useRuntimeConfig();
+const route = useRoute();
 
 let { auth, isAuth, token, userAuth0, userAuthor } = await getAuth0();
 
@@ -192,27 +138,24 @@ const statuses = {
   completed: "text-gray-500 bg-gray-100/10",
   cancelled: "text-rose-400 bg-rose-400/10",
 };
-const actions = {
-  Edit: "text-accent bg-gray-600/30 ring-gray-700",
-  Join: "text-green-400 bg-green-400/10 ring-green-400/30",
-  Review: "text-accent bg-gray-600/30 ring-gray-700",
-};
-const sessions = [
-  {
-    ref: "1",
-    title: "Jumpstart 1B",
-    instructors: [
-      {
-        first: "Radison",
-        last: "Akerman",
-      },
-    ],
-    start: "2021-08-30T18:00:00.000Z",
-    end: "2021-08-30T19:00:00.000Z",
-    status: "live",
-    action: "Join",
+
+const { data: sessions } = await useFetch("/sessions", {
+  method: "GET",
+  server: false, // not to Nitro
+  baseURL: config.urlBase.back, // backend url
+  headers: {
+    // auth headers
+    Authorization: "Bearer " + token,
   },
-];
+});
+
+console.log(route.params.ref);
+
+const filteredSessions = computed(() => {
+  return sessions.value.filter((session) => {
+    return session.ref["@ref"].id === route.params.ref;
+  });
+});
 
 const stats = [
   { name: "Students in Queue", value: "10" },
@@ -233,6 +176,45 @@ const activityItems = [
     status: "Completed",
     duration: "25s",
     date: "45 minutes ago",
+    dateTime: "2023-01-23T11:00",
+  },
+  {
+    user: {
+      name: "Arlene Mccoy",
+      imageUrl:
+        "https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    },
+    commit: "2d89f0c8",
+    branch: "main",
+    status: "Completed",
+    duration: "10 mins",
+    date: "59 minutes ago",
+    dateTime: "2023-01-23T11:00",
+  },
+  {
+    user: {
+      name: "Devon Webb",
+      imageUrl:
+        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80",
+    },
+    commit: "2d89f0c8",
+    branch: "main",
+    status: "Completed",
+    duration: "12 mins",
+    date: "1 hour ago",
+    dateTime: "2023-01-23T11:00",
+  },
+  {
+    user: {
+      name: "Tom Cook",
+      imageUrl:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    },
+    commit: "2d89f0c8",
+    branch: "main",
+    status: "Completed",
+    duration: "10s",
+    date: "2 hours ago",
     dateTime: "2023-01-23T11:00",
   },
   // More items...

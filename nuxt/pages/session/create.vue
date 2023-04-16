@@ -359,7 +359,10 @@ let sendSessionForm = async () => {
     });
     isIssuesNote.value = true;
   } else {
-    return navigateTo("/class/" + createdSession.value.ref.id);
+    console.log(createdSession.value);
+    return navigateTo(
+      "/session/" + createdSession.value.ref["@ref"].id + "/dash"
+    );
   }
   isSubmitting.value = false;
 };
