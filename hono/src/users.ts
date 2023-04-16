@@ -66,6 +66,24 @@ export async function addStudentClassForUser(c) {
 
 }
 
+export const userSchema = z.object({
+    ref: z
+      .string()
+      .trim()
+      .regex(/^[0-9]+$/, {
+        message: "Ref must be a number",
+      }),
+    username: z
+      .string()
+      .trim()
+      .regex(/^[a-zA-Z0-9_]+$/, {
+        message: "Username can only contain letters, numbers, and underscores",
+      })
+      .min(6, { message: "Username must be 6-24 characters long" })
+      .max(24, { message: "Username must be 6-24 characters long" }),
+    isAdmin: z.boolean(),
+  });
+
 export async function createUser(c) {
     const data = await c.req.json();
     try{
