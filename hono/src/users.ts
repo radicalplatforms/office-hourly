@@ -22,19 +22,13 @@ const faunaClient = new faunadb.Client({
   secret: "fnAFBncQWJAASbTQJZ9EssnEJxiaKKln11deXGwR",
 });
 
-const app = new Hono<{ Bindings: Bindings }>();
-
-app.use("*", logger());
-app.use("*", prettyJSON());
-app.get("/", (c) => c.text("OH! API v1.0.0"));
-
 async function getStudentClasses(c) {
     try { 
         const { username } = await c.req.query();
 
         // try to query database:
         const result = await faunaClient.query(
-            Call(Function(" getStudentClasses"), username)
+            Call(Function("getStudentClasses"), username)
         );
         // send response
         return c.json(result);
