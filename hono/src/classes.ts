@@ -22,13 +22,9 @@ const faunaClient = new faunadb.Client({
   secret: "fnAFBncQWJAASbTQJZ9EssnEJxiaKKln11deXGwR",
 });
 
-const app = new Hono<{ Bindings: Bindings }>();
 
-app.use("*", logger());
-app.use("*", prettyJSON());
-app.get("/", (c) => c.text("OH! API v1.0.0"));
 
-app.get('/classes', async (c) => {
+async function getClasses(c) {
     try { 
         const { username } = await c.req.query();
 
@@ -41,10 +37,10 @@ app.get('/classes', async (c) => {
     } catch (e) {
         return c.json(e);
     }
-});
+}
 
 
-app.put('/classes', async (c) => {
+async function putClasses(c) {
     const data = await c.req.json();
 
     try {
@@ -56,9 +52,9 @@ app.put('/classes', async (c) => {
         return c.json(e);
     }
 
-})
+}
 
-app.post('/classes', async (c) => {
+async function postClasses(c) {
     const data = await c.req.json();
     try{
         const result = await faunaClient.query(
@@ -68,9 +64,9 @@ app.post('/classes', async (c) => {
     } catch(e) {
         return c.json(e);
     }
-})
+}
 
-app.delete('/classes', async (c) => {
+async function deleteClasses(c) {
     const data = await c.req.json();
     try{
         const result = await faunaClient.query(
@@ -81,6 +77,4 @@ app.delete('/classes', async (c) => {
     catch(e) {
         return c.json(e);
     }
-})
-
-export default app;
+}
