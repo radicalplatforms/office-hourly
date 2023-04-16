@@ -15,6 +15,7 @@ import { zValidator } from "@hono/zod-validator";
 import * as jose from "jose";
 import { Bindings } from "hono/dist/types/types";
 import faunadb from "faunadb";
+const fetch = require('node-fetch');
 const { Call, Function, Paginate, Match, Index, Lambda, Get, Var, Map } =
     faunadb.query;
 
@@ -26,7 +27,14 @@ const faunaClient = new faunadb.Client({
 
 export async function getClasses(c) {
     try { 
+        const token = await c.req.header("Authorization");
         const username = await c.req.header("username");
+        // get username from Auth0r:
+        const response = await fetch('https://api.author.rakerman.com/api/auth0/user', {
+            method: 'GET',
+            headers: { 'Authorization': token }
+        });
+        console.log(response.body);
         // try to query database:
         const result = await faunaClient.query(
             Call(Function("getStudentClasses"), username)
