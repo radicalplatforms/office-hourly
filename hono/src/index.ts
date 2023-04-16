@@ -17,6 +17,7 @@ import { Bindings } from "hono/dist/types/types";
 import faunadb from "faunadb";
 import {getClasses, putClasses, postClasses, deleteClasses } from "./classes";
 import {getStudentClasses, addStudentClassForUser, createUser, addInstructorClassForUser, deleteUser} from "./users";
+import {getSession, postSession, putSession, addInstructor, deleteSession} from "./sessions";
 const { Call, Function, Paginate, Match, Index, Lambda, Get, Var, Map } =
     faunadb.query;
 
@@ -37,10 +38,18 @@ app.post('/classes', postClasses);
 app.delete('/classes', deleteClasses);
 
 app.get('/users', getStudentClasses);
-app.put('/users', addStudentClassForUser);
+app.put('/users/student', addStudentClassForUser);
 app.post('/users', createUser);
-app.post('/users', addInstructorClassForUser);
+app.put('/users/instructor', addInstructorClassForUser);
 app.delete('/users', deleteUser);
+
+app.get('/sessions', getSession);
+app.put('/sessions', putSession);
+app.post('/sessions', postSession);
+app.put('/sessions/instructor', addInstructor);
+app.delete('/sessions', deleteSession);
+
+
 
 
 
