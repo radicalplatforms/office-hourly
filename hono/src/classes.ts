@@ -46,12 +46,13 @@ export async function putClasses(c) {
         const result = await faunaClient.query(
             Call(Function("updateClass"), data.ref, data.title, data.number)
         );
-        return c.json(result);
+        return c.text("Completed");
     } catch(e) {
         return c.json(e);
     }
 
 }
+
 
 export async function postClasses(c) {
     const data = await c.req.json();
@@ -66,12 +67,12 @@ export async function postClasses(c) {
 }
 
 export async function deleteClasses(c) {
-    const data = await c.req.json();
+    const ref = await c.req.header("ref");
     try{
         const result = await faunaClient.query(
-            Call(Function("deleteClass"), data.ref)
+            Call(Function("deleteClass"), ref)
         );
-        return c.json(result);
+        return c.text("Completed");
     }
     catch(e) {
         return c.json(e);
