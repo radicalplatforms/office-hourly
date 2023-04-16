@@ -55,12 +55,23 @@ export async function putClasses(c) {
 
 
 export async function postClasses(c) {
+    const username = c.req.header("username");
+    // const ref = c.req.header("ref");
     const data = await c.req.json();
     try{
-        const result = await faunaClient.query(
+        // create the class
+        const temp = await faunaClient.query(
             Call(Function("createClass"), data.ref, data.title, data.number)
         );
-        return c.json(result);
+        // get ref from username:
+        const temp2 = await faunaClient.query(
+            Call(Function("getUserByUsername"), username)
+        );
+        // put user as an admin of the course
+        const result = await faunaClient.query(
+            Call(Function("addInstructorClassForUser"), temp2.data[0], temp.data.ref, true)
+        );
+        return c.json(temp); 
     } catch(e) {
         return c.json(e);
     }

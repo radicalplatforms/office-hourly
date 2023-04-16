@@ -37,6 +37,20 @@ export async function getStudentsByClass(c) {
     }
 }
 
+// returns all instructors in the class
+export async function getInstructorsInClass(c) {
+    try {
+        const class_id = await c.req.header("class");
+        const result = await faunaClient.query(
+            Call(Function("getInstructorsByClass"), class_id)
+        );
+        console.log(result);
+        return c.json(result);
+    } catch (e) {
+        c.json(e);
+    }
+}
+
 
 export async function addStudentClassForUser(c) {
     const data = await c.req.json();
