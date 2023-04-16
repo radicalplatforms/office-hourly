@@ -28,13 +28,13 @@ app.use("*", logger());
 app.use("*", prettyJSON());
 app.get("/", (c) => c.text("OH! API v1.0.0"));
 
-async function getUsers(c) {
+async function getStudentClasses(c) {
     try { 
         const { username } = await c.req.query();
 
         // try to query database:
         const result = await faunaClient.query(
-            Call(Function("getUser"), username)
+            Call(Function(" getStudentClasses"), username)
         );
         // send response
         return c.json(result);
@@ -44,12 +44,12 @@ async function getUsers(c) {
 }
 
 
-async function putUsers(c) {
+async function addStudentClassForUser(c) {
     const data = await c.req.json();
 
     try {
         const result = await faunaClient.query(
-            Call(Function("updateUser", data.ref, data.username, data.isInstructor, data.instructorClasses, data.isStudent, data.studentClasses))
+            Call(Function("addStudentClassForUser", data.ref, data.classID))
         );
         return c.json(result);
     } catch(e) {
@@ -58,11 +58,11 @@ async function putUsers(c) {
 
 }
 
-async function postUsers(c) {
+async function createUser(c) {
     const data = await c.req.json();
     try{
         const result = await faunaClient.query(
-            Call(Function("createUser", data.ref, data.username, data.isInstructor, data.instructorClasses, data.isStudent, data.studentClasses))
+            Call(Function("createUser", data.ref, data.username, data.isAdmin))
         );
         return c.json(result);
     } catch(e) {
@@ -70,7 +70,19 @@ async function postUsers(c) {
     }
 }
 
-async function deleteUsers(c) {
+async function addInstructorClassForUser(c) {
+    const data = await c.req.json();
+    try{
+        const result = await faunaClient.query(
+            Call(Function("addInstructorClassForUser", data.ref, data.classID, data.isAdmin))
+        );
+        return c.json(result);
+    } catch(e) {
+        return c.json(e);
+    }
+}
+
+async function deleteUser(c) {
     const data = await c.req.json();
     try{
         const result = await faunaClient.query(
