@@ -90,12 +90,7 @@ export const ticketSchema = z.object({
     }),
   username: z
     .string()
-    .trim()
-    .regex(/^[a-zA-Z0-9_]+$/, {
-      message: "Username can only contain letters, numbers, and underscores",
-    })
-    .min(6, { message: "Username must be 6-24 characters long" })
-    .max(24, { message: "Username must be 6-24 characters long" }),
+    .trim(),
   sessionID: z
     .string()
     .trim()
@@ -117,16 +112,10 @@ export const ticketSchema = z.object({
 // @param:time {string ISO} - check pinned messages for formatting time strings!
 // @returns {object} ticket object
 export async function createTicket(c) {
-  const ref = await c.req.header("ref");
-  const username = await c.req.header("username");
-  const sessionID = await c.req.header("sessionID");
-  const position = await c.req.header("position");
-  const time = await c.req.header("time");
-
-
+  const data = await c.req.json();
   try {
     const result = await faunaClient.query(
-      Call(Function("createTicket"), ref, username, sessionID, position, time)
+      Call(Function("createTicket"), data.ref, data.username, data.sessionID, data.position, data.time)
     );
 
     return c.json(result);
@@ -142,7 +131,7 @@ export async function createTicket(c) {
 
 export const acceptStudentTicketSchema = z.object({
     ref: z.string(),
-    instructor: z.string().min(6).max(24),
+    instructor: z.string().min(1).max(24),
 });
 
 // TA takes student in
@@ -150,13 +139,10 @@ export const acceptStudentTicketSchema = z.object({
 // @param:instructor {string} TA username
 // @returns {object} ticket object
 export async function acceptStudentTicket(c) {
-  const ref = await c.req.header("ref");
-  const instructor = await c.req.header("instructor");
-
-
+  const data = await c.req.json();
   try {
     const result = await faunaClient.query(
-      Call(Function("acceptStudentTicket"), ref, instructor)
+      Call(Function("acceptStudentTicket"), data.ref, data.instructor)
     );
 
     return c.json(result);
