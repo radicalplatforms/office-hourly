@@ -16,7 +16,7 @@ import { zValidator } from "@hono/zod-validator";
 import * as jose from "jose";
 import { Bindings } from "hono/dist/types/types";
 import faunadb from "faunadb";
-import {getClasses, putClasses, postClasses, deleteClasses } from "./classes";
+import {classSchema, getClasses, putClasses, postClasses, deleteClasses } from "./classes";
 import {getStudentsByClass, addStudentClassForUser, createUser, addInstructorClassForUser, getEstimatedWaitTime, deleteUser, getInstructorsInClass} from "./users";
 import {sessionSchema, getSession, postSession, putSession, addInstructor, deleteSession} from "./sessions";
 import {ticketSchema, getActiveQueue, getCurrentStudents, getMyCurrentStudent, createTicket, acceptStudentTicket, deleteTicket} from "./tickets";
@@ -46,7 +46,7 @@ app.get("/", (c) => c.text("OH! API v1.0.0"));
 // CLASSES REQUESTS:
 app.get('/classes', getClasses);
 app.put('/classes', putClasses);
-app.post('/classes', postClasses);
+app.post('/classes', zValidator("json", classSchema), postClasses);
 app.delete('/classes', deleteClasses);
 
 app.get('/users', getStudentsByClass);

@@ -55,18 +55,8 @@ export const sessionSchema = z.object({
     title: z.string().min(2, {
       message: 'Title must be at least 2 characters long',
     }),
-    start: z.string().regex(
-      /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})Z$/,
-      {
-        message: 'Start time must be in ISO8601 format',
-      },
-    ),
-    end: z.string().regex(
-      /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}))Z$/,
-      {
-        message: 'End time must be in ISO8601 format',
-      },
-    ),
+    start: z.string().datetime(),
+    end: z.string().datetime(),
     instructor: z.string().min(2, {
       message: 'Instructor name must be at least 2 characters long',
     }),
