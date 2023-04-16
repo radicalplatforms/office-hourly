@@ -27,8 +27,9 @@ export async function getSession(c) {
 
     try {
         const result = await faunaClient.query(
-            Call(Function("geSession"), ref)
+            Call(Function("getSession"), ref)
         );
+        return c.json(result);
     } catch(e) {
         return c.json(e);
     }
