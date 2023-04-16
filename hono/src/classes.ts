@@ -45,7 +45,7 @@ export async function putClasses(c) {
 
     try {
         const result = await faunaClient.query(
-            Call(Function("updateClass", data.ref, data.title, data.number))
+            Call(Function("updateClass"), data.ref, data.title, data.number)
         );
         return c.json(result);
     } catch(e) {
@@ -58,7 +58,7 @@ export async function postClasses(c) {
     const data = await c.req.json();
     try{
         const result = await faunaClient.query(
-            Call(Function("createClass", data.ref, data.title, data.number))
+            Call(Function("createClass"), data.ref, data.title, data.number)
         );
         return c.json(result);
     } catch(e) {
@@ -70,7 +70,7 @@ export async function deleteClasses(c) {
     const data = await c.req.json();
     try{
         const result = await faunaClient.query(
-            Call(Function("deleteClass", data.ref))
+            Call(Function("deleteClass"), data.ref)
         );
         return c.json(result);
     }
