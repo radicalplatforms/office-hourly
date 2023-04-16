@@ -1,6 +1,6 @@
 <template>
   <Html data-theme="dark" />
-  <div>
+  <div class="h-full">
     <!-- Mobile Sidebar -->
     <SidebarMobile
       :classes="classes"
@@ -18,11 +18,11 @@
       class="hidden xl:fixed xl:inset-y-0 xl:z-50 xl:flex xl:w-72 xl:flex-col"
     />
 
-    <div class="xl:pl-72">
+    <div class="h-full xl:pl-72">
       <!-- Navbar -->
       <Navbar @openSidebar="sidebarOpen = true" />
 
-      <main>
+      <main class="h-full">
         <slot />
       </main>
     </div>

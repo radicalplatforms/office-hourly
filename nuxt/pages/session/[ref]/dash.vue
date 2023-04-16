@@ -68,7 +68,7 @@
   </ul>
 
   <!-- Stats -->
-  <div class="grid grid-cols-1 bg-gray-700/10 sm:grid-cols-2 lg:grid-cols-4">
+  <div class="grid grid-cols-1 bg-primary sm:grid-cols-2 lg:grid-cols-4">
     <div
       v-for="(stat, statIdx) in stats"
       :key="stat.name"
@@ -107,13 +107,7 @@
       <thead class="border-b border-white/10 text-sm leading-6 text-white">
         <tr>
           <th scope="col" class="py-2 pl-4 pr-8 font-semibold sm:pl-6 lg:pl-8">
-            User
-          </th>
-          <th
-            scope="col"
-            class="hidden py-2 pl-0 pr-8 font-semibold sm:table-cell"
-          >
-            Commit
+            Student
           </th>
           <th
             scope="col"
@@ -125,13 +119,13 @@
             scope="col"
             class="hidden py-2 pl-0 pr-8 font-semibold md:table-cell lg:pr-20"
           >
-            Duration
+            Time in Queue
           </th>
           <th
             scope="col"
             class="hidden py-2 pl-0 pr-4 text-right font-semibold sm:table-cell sm:pr-6 lg:pr-8"
           >
-            Deployed at
+            Assist Time
           </th>
         </tr>
       </thead>
@@ -146,18 +140,6 @@
               />
               <div class="truncate text-sm font-medium leading-6 text-white">
                 {{ item.user.name }}
-              </div>
-            </div>
-          </td>
-          <td class="hidden py-4 pl-0 pr-4 sm:table-cell sm:pr-8">
-            <div class="flex gap-x-3">
-              <div class="font-mono text-sm leading-6 text-gray-400">
-                {{ item.commit }}
-              </div>
-              <div
-                class="rounded-md bg-gray-700/40 px-2 py-1 text-xs font-medium text-gray-400 ring-1 ring-inset ring-white/10"
-              >
-                {{ item.branch }}
               </div>
             </div>
           </td>
@@ -233,10 +215,10 @@ const sessions = [
 ];
 
 const stats = [
-  { name: "Number of deploys", value: "405" },
-  { name: "Average deploy time", value: "3.65", unit: "mins" },
-  { name: "Number of servers", value: "3" },
-  { name: "Success rate", value: "98.5%" },
+  { name: "Students in Queue", value: "10" },
+  { name: "Average Assist Time", value: "3.65", unit: "mins" },
+  { name: "Student Churn", value: "3", unit: "per hour" },
+  { name: "Position Drops", value: "2" },
 ];
 
 const activityItems = [

@@ -44,8 +44,10 @@ export async function getInstructorsInClass(c) {
     let result = await faunaClient.query(
       Call(Function("getInstructorsByClass"), class_id)
     );
+
     let instructors = [];
     for (let i = 0; i < result.length; i++) {
+      // console.log(result[i].data.username);
       const response = await fetch(
         "https://api.author.rakerman.com/api/rf/user/" +
           result[i].data.username,
@@ -57,6 +59,7 @@ export async function getInstructorsInClass(c) {
       const data = await response.json();
       instructors[i] = data;
     }
+    // console.log(instructors);
     return c.json(instructors);
   } catch (e) {
     return c.json(e);

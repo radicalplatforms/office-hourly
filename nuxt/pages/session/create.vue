@@ -135,7 +135,7 @@
                       <span class="flex items-center">
                         <img
                           v-if="payload.instructors.length === 1"
-                          :src="payload.instructors[0].profile.pfp"
+                          :src="payload.instructors[0]?.profile.pfp"
                           alt=""
                           class="h-5 w-5 flex-shrink-0 rounded-full"
                           :class="{ 'mr-3': payload.instructors.length === 1 }"
@@ -233,7 +233,7 @@
             Cancel
           </NuxtLink>
           <button
-            @click="sendForm"
+            @click="sendSessionForm"
             type="button"
             class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-secondary py-2 px-4 text-sm font-medium text-neutral shadow-sm hover:bg-secondary-focus focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2"
             :class="{
@@ -298,34 +298,39 @@ let { auth, isAuth, token, userAuth0, userAuthor } = await getAuth0();
 
 const issues = reactive([]);
 
-let payload = reactive({
-  classRef: route.query.classRef,
-  title: "",
-  start: "",
-  end: "",
-  instructors: [],
-});
-
-let isCreating = ref(false);
-let isSubmitting = ref(false);
-let isIssuesNote = ref(false);
-
-const { data: instructors } = await useFetch("/users/instructor", {
+const { data: rawInstructors } = await useFetch("/users/instructor", {
   method: "GET",
   server: false, // not to Nitro
   baseURL: config.urlBase.back, // backend url
   headers: {
     // auth headers
     Authorization: "Bearer " + token,
-    ClassRef: payload.classRef,
+    ClassRef: route.query.classRef,
   },
 });
 
-console.log(instructors);
+let payload = reactive({
+  classRef: route.query.classRef,
+  title: "",
+  start: "",
+  end: "",
+  instructors: [rawInstructors.value[0]],
+});
 
-let sendForm = async () => {
+// console.log(payload);
+let isCreating = ref(true);
+let isSubmitting = ref(false);
+let isIssuesNote = ref(false);
+
+let sendSessionForm = async () => {
   isSubmitting.value = true;
-  const { data, error } = await useFetch("/api/class", {
+  console.log("making body");
+  let body = JSON.parse(JSON.stringify(payload));
+  body.instructors = body.instructors.map((instructor) => {
+    return instructor.profile.username;
+  });
+  console.log("sending post");
+  const { data: createdSession, error } = await useFetch("/sessions", {
     method: isCreating.value ? "POST" : "PUT",
     server: false, // not to Nitro
     baseURL: config.urlBase.back, // backend url
@@ -333,11 +338,16 @@ let sendForm = async () => {
       // auth headers
       Authorization: "Bearer " + token,
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(body),
+    onResponse({ request, response, options }) {
+      return navigateTo("/class/" + response._data.ref);
+    },
   });
+  console.log(rawInstructors);
   // Reset and construct form field issues
   issues.length = 0;
   if (error.value) {
+    console.log(error);
     // Add issues to issues array
     error.value.response._data.error.issues.forEach((issue) => {
       issue.path.forEach((pth) => {
@@ -349,7 +359,7 @@ let sendForm = async () => {
     });
     isIssuesNote.value = true;
   } else {
-    return navigateTo("/class/" + data.value.ref);
+    return navigateTo("/class/" + createdSession.value.ref.id);
   }
   isSubmitting.value = false;
 };
