@@ -8,7 +8,7 @@
           :title="item.number"
           :desc="item.title"
           :url="'/class/' + item.id"
-          :current="false"
+          :current="route.path === '/class/' + item.id"
         />
       </li>
       <li>
@@ -16,7 +16,7 @@
           :icon="SquaresPlusIcon"
           title="Create Class"
           :url="'/class/create'"
-          :current="false"
+          :current="route.path === '/class/create'"
         />
       </li>
     </ul>
@@ -29,4 +29,5 @@ import { SquaresPlusIcon } from "@heroicons/vue/24/outline";
 const props = defineProps({
   classes: Object,
 });
+const route = useRoute();
 </script>

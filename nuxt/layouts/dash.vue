@@ -12,6 +12,8 @@
     <!-- Desktop Sidebar -->
     <SidebarBody
       :classes="classes"
+      :sessions="classes"
+      :tickets="classes"
       :userAuthor="userAuthor"
       class="hidden xl:fixed xl:inset-y-0 xl:z-50 xl:flex xl:w-72 xl:flex-col"
     />

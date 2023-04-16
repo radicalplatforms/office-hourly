@@ -12,8 +12,8 @@
     <nav class="flex flex-1 flex-col">
       <ul role="list" class="flex flex-1 flex-col gap-y-7">
         <SidebarBodyClasses :classes="classes" />
-        <SidebarBodySessions :classes="sessions" />
-        <SidebarBodyTickets :classes="tickets" />
+        <SidebarBodySessions :sessions="sessions" />
+        <SidebarBodyTickets :tickets="tickets" />
         <SidebarBodyUser :userAuthor="userAuthor" />
       </ul>
     </nav>
