@@ -82,7 +82,12 @@ export async function getMyCurrentStudent(c) {
 // @param:time {string ISO} - check pinned messages for formatting time strings!
 // @returns {object} ticket object
 export async function createTicket(c) {
-  const { ref, username, sessionID, position, time } = await c.req.header("session");
+  const ref = await c.req.header("ref");
+  const username = await c.req.header("username");
+  const sessionID = await c.req.header("sessionID");
+  const position = await c.req.header("position");
+  const time = await c.req.header("time");
+
 
   try {
     const result = await faunaClient.query(
@@ -120,7 +125,7 @@ export async function acceptStudentTicket(c) {
 // @returns {object} ticket object
 export async function deleteTicket(c) {
 
-    const { ref } = await c.req.json();
+    const ref = await c.req.header("ref");
     
     try {
         const result = await faunaClient.query(
