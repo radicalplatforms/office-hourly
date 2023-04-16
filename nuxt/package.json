@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "@auth0/auth0-spa-js": "^1.22.1",
-    "@headlessui/vue": "^1.6.1",
+    "@headlessui/vue": "^1.7.13",
     "@heroicons/vue": "^2.0.13",
     "@nuxtjs/tailwindcss": "^6.3.1",
     "@tailwindcss/aspect-ratio": "^0.4.0",

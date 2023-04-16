@@ -30,28 +30,20 @@
 </template>
 
 <script setup>
-import { FolderIcon } from "@heroicons/vue/24/outline";
-
 const config = useRuntimeConfig();
 
 let { auth, isAuth, token, userAuth0, userAuthor } = await getAuth0();
 
-const classes = [
-  {
-    ref: "1",
-    title: "Algorithms I",
-    number: "CS 401",
-    icon: FolderIcon,
-    current: true,
+const { data: classes } = await useFetch("/classes", {
+  method: "GET",
+  server: false, // not to Nitro
+  baseURL: config.urlBase.back, // backend url
+  headers: {
+    // auth headers
+    Authorization: "Bearer " + token,
+    username: "400003",
   },
-  {
-    ref: "2",
-    title: "Intro to Networking",
-    number: "CS 450",
-    icon: FolderIcon,
-    current: false,
-  },
-];
+});
 
 const sidebarOpen = ref(false);
 </script>

@@ -4,11 +4,11 @@
     <ul role="list" class="-mx-2 mt-2 space-y-1">
       <li v-for="item in classes" :key="item.title">
         <SidebarBodyButton
-          :icon="item.icon"
-          :title="item.number"
-          :desc="item.title"
-          :url="'/class/' + item.id"
-          :current="route.path === '/class/' + item.id"
+          :icon="FolderIcon"
+          :title="item.Number"
+          :desc="item.Title"
+          :url="'/class/' + item.ref"
+          :current="route.path === '/class/' + item.ref"
         />
       </li>
       <li>
@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { SquaresPlusIcon } from "@heroicons/vue/24/outline";
+import { FolderIcon, SquaresPlusIcon } from "@heroicons/vue/24/outline";
 
 const props = defineProps({
   classes: Object,

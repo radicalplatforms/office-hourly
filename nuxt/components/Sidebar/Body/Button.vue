@@ -15,6 +15,12 @@
         {{ desc }}
       </div>
     </div>
+    <span
+      v-if="false"
+      class="ml-auto w-9 min-w-max whitespace-nowrap rounded-full bg-indigo-600 px-2.5 py-0.5 mr-1 text-center text-xs font-medium leading-5 text-white ring-1 ring-inset ring-indigo-500"
+      aria-hidden="true"
+      >TA</span
+    >
   </NuxtLink>
 </template>
 

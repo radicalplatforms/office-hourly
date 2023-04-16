@@ -4,7 +4,7 @@
     <ul role="list" class="-mx-2 mt-2 space-y-1">
       <li v-for="item in sessions" :key="item.title">
         <SidebarBodyButton
-          :icon="item.icon"
+          :icon="FolderIcon"
           :title="item.number"
           :desc="item.title"
           :url="'/class/' + item.id"
@@ -16,6 +16,8 @@
 </template>
 
 <script setup>
+import { FolderIcon } from "@heroicons/vue/24/outline/index.js";
+
 const props = defineProps({
   sessions: Object,
 });
