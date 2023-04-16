@@ -76,6 +76,19 @@ export async function addInstructorClassForUser(c) {
     }
 }
 
+export async function getEstimatedWaitTime(c) {
+    const session_id = await c.req.header("session_id");
+    try{
+        const result = await faunaClient.query(
+            Call(Function("getEstimatedWaitTime"), session_id)
+        );
+        return c.json(result);
+    }
+    catch(e) {
+        return c.json(e);
+    }
+}
+
 export async function deleteUser(c) {
     const data = await c.req.json();
     try{

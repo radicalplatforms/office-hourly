@@ -16,7 +16,7 @@ import * as jose from "jose";
 import { Bindings } from "hono/dist/types/types";
 import faunadb from "faunadb";
 import {getClasses, putClasses, postClasses, deleteClasses } from "./classes";
-import {getStudentsByClass, addStudentClassForUser, createUser, addInstructorClassForUser, deleteUser} from "./users";
+import {getStudentsByClass, addStudentClassForUser, createUser, addInstructorClassForUser, getEstimatedWaitTime, deleteUser} from "./users";
 import {getSession, postSession, putSession, addInstructor, deleteSession} from "./sessions";
 import {getActiveQueue, getCurrentStudents, getMyCurrentStudent, createTicket, acceptStudentTicket, deleteTicket} from "./tickets";
 const { Call, Function, Paginate, Match, Index, Lambda, Get, Var, Map } =
@@ -42,6 +42,7 @@ app.get('/users', getStudentsByClass);
 app.put('/users/student', addStudentClassForUser);
 app.post('/users', createUser);
 app.put('/users/instructor', addInstructorClassForUser);
+app.get('/users/time', getEstimatedWaitTime);
 app.delete('/users', deleteUser);
 
 app.get('/sessions', getSession);
