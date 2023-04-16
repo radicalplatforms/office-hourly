@@ -6,7 +6,7 @@
 
     <div>
       <NuxtLink
-        to="/session/create"
+        :to="'/session/create?classRef=' + route.params.ref"
         class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-secondary py-2 px-4 text-sm font-medium text-neutral shadow-sm hover:bg-secondary-focus focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2"
       >
         Create Session
@@ -139,6 +139,7 @@ definePageMeta({
 });
 
 const config = useRuntimeConfig();
+const route = useRoute();
 
 let { auth, isAuth, token, userAuth0, userAuthor } = await getAuth0();
 

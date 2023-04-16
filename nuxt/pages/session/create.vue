@@ -127,7 +127,95 @@
                 Instructors*
               </label>
               <div class="mt-1 sm:col-span-2 sm:mt-0">
-                <FormSectionInstructors />
+                <Listbox as="div" v-model="payload.instructors" multiple>
+                  <div class="relative w-full max-w-lg sm:max-w-xs">
+                    <ListboxButton
+                      class="relative w-full cursor-default rounded-md bg-primary-focus py-2 pl-3 pr-10 rounded-md bg-primary-focus border-accent border-[1px] shadow-sm focus:border-secondary focus:ring-secondary sm:text-sm"
+                    >
+                      <span class="flex items-center">
+                        <img
+                          v-if="payload.instructors.length === 1"
+                          :src="payload.instructors[0].profile.pfp"
+                          alt=""
+                          class="h-5 w-5 flex-shrink-0 rounded-full"
+                          :class="{ 'mr-3': payload.instructors.length === 1 }"
+                        />
+                        <span class="block truncate">{{
+                          payload.instructors
+                            .map(
+                              (person) =>
+                                person.profile.first + " " + person.profile.last
+                            )
+                            .join(", ")
+                        }}</span>
+                      </span>
+                      <span
+                        class="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2"
+                      >
+                        <ChevronUpDownIcon
+                          class="h-5 w-5 text-gray-400"
+                          aria-hidden="true"
+                        />
+                      </span>
+                    </ListboxButton>
+
+                    <transition
+                      leave-active-class="transition ease-in duration-100"
+                      leave-from-class="opacity-100"
+                      leave-to-class="opacity-0"
+                    >
+                      <ListboxOptions
+                        class="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-primary-focus py-1 text-accent shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                      >
+                        <ListboxOption
+                          as="template"
+                          v-for="person in instructors"
+                          :key="person.profile.username"
+                          :value="person"
+                          v-slot="{ active, selected }"
+                        >
+                          <li
+                            :class="[
+                              active
+                                ? 'bg-secondary text-neutral'
+                                : 'text-accent',
+                              'relative cursor-default select-none py-2 pl-3 pr-9',
+                            ]"
+                          >
+                            <div class="flex items-center">
+                              <img
+                                :src="person.profile.pfp"
+                                alt=""
+                                class="h-5 w-5 flex-shrink-0 rounded-full"
+                              />
+                              <span
+                                :class="[
+                                  selected ? 'font-semibold' : 'font-normal',
+                                  'ml-3 block truncate',
+                                ]"
+                                >{{
+                                  person.profile.first +
+                                  " " +
+                                  person.profile.last
+                                }}</span
+                              >
+                            </div>
+
+                            <span
+                              v-if="selected"
+                              :class="[
+                                active ? 'text-neutral' : 'text-secondary',
+                                'absolute inset-y-0 right-0 flex items-center pr-4',
+                              ]"
+                            >
+                              <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                            </span>
+                          </li>
+                        </ListboxOption>
+                      </ListboxOptions>
+                    </transition>
+                  </div>
+                </Listbox>
                 <FormIssues :issues="issues" field="instructors" />
               </div>
             </div>
@@ -138,7 +226,7 @@
       <div class="pt-5">
         <div class="flex justify-end">
           <NuxtLink
-            to="/"
+            to="/classes"
             type="button"
             class="rounded-md border bg-primary-focus border-accent py-2 px-4 text-sm font-medium text-neutral shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2"
           >
@@ -191,7 +279,12 @@ import {
   ComboboxInput,
   ComboboxOptions,
   ComboboxOption,
+  Listbox,
+  ListboxButton,
+  ListboxOption,
+  ListboxOptions,
 } from "@headlessui/vue";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/vue/20/solid/index.js";
 
 definePageMeta({
   middleware: ["enforce-auth"],
@@ -201,31 +294,34 @@ definePageMeta({
 const config = useRuntimeConfig();
 const route = useRoute();
 
-console.log(route.query);
-
 let { auth, isAuth, token, userAuth0, userAuthor } = await getAuth0();
 
 const issues = reactive([]);
 
 let payload = reactive({
-  classRef: route.query.class,
+  classRef: route.query.classRef,
   title: "",
   start: "",
   end: "",
+  instructors: [],
 });
 
 let isCreating = ref(false);
 let isSubmitting = ref(false);
 let isIssuesNote = ref(false);
 
-const people = [
-  { id: 1, name: "Durward Reynolds" },
-  { id: 2, name: "Kenton Towne" },
-  { id: 3, name: "Therese Wunsch" },
-  { id: 4, name: "Benedict Kessler" },
-  { id: 5, name: "Katelyn Rohan" },
-];
-const selectedPeople = ref([people[0], people[1]]);
+const { data: instructors } = await useFetch("/users/instructor", {
+  method: "GET",
+  server: false, // not to Nitro
+  baseURL: config.urlBase.back, // backend url
+  headers: {
+    // auth headers
+    Authorization: "Bearer " + token,
+    ClassRef: payload.classRef,
+  },
+});
+
+console.log(instructors);
 
 let sendForm = async () => {
   isSubmitting.value = true;

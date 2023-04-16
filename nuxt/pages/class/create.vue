@@ -78,7 +78,7 @@
       <div class="pt-5">
         <div class="flex justify-end">
           <NuxtLink
-            to="/"
+            to="/classes"
             type="button"
             class="rounded-md border bg-primary-focus border-accent py-2 px-4 text-sm font-medium text-neutral shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2"
           >
@@ -143,13 +143,13 @@ let payload = reactive({
   number: "",
 });
 
-let isCreating = ref(false);
+let isCreating = ref(true);
 let isSubmitting = ref(false);
 let isIssuesNote = ref(false);
 
 let sendForm = async () => {
   isSubmitting.value = true;
-  const { data, error } = await useFetch("/api/class", {
+  const { data, error } = await useFetch("/classes", {
     method: isCreating.value ? "POST" : "PUT",
     server: false, // not to Nitro
     baseURL: config.urlBase.back, // backend url

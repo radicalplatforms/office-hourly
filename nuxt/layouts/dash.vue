@@ -41,9 +41,10 @@ const { data: classes } = await useFetch("/classes", {
   headers: {
     // auth headers
     Authorization: "Bearer " + token,
-    username: "400003",
   },
 });
+
+console.log(classes);
 
 const sidebarOpen = ref(false);
 </script>
