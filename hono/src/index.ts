@@ -16,6 +16,7 @@ import * as jose from "jose";
 import { Bindings } from "hono/dist/types/types";
 import faunadb from "faunadb";
 import {getClasses, putClasses, postClasses, deleteClasses } from "./classes";
+import {getStudentClasses, addStudentClassForUser, createUser, addInstructorClassForUser, deleteUser} from "./users";
 const { Call, Function, Paginate, Match, Index, Lambda, Get, Var, Map } =
     faunadb.query;
 
@@ -34,5 +35,13 @@ app.get('/classes', getClasses);
 app.put('/classes', putClasses);
 app.post('/classes', postClasses);
 app.delete('/classes', deleteClasses);
+
+app.get('/users', getStudentClasses);
+app.put('/users', addStudentClassForUser);
+app.post('/users', createUser);
+app.post('/users', addInstructorClassForUser);
+app.delete('/users', deleteUser);
+
+
 
 export default app;
