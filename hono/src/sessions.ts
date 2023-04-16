@@ -57,9 +57,9 @@ export const sessionSchema = z.object({
     }),
     start: z.string().datetime(),
     end: z.string().datetime(),
-    instructor: z.string().min(2, {
+    instructor: z.array(z.string().min(2, {
       message: 'Instructor name must be at least 2 characters long',
-    }),
+    })),
 });
 
 // CREATE a new session
@@ -76,6 +76,32 @@ export async function postSession(c) {
     }
 }
 
+/**
+* Sets limits for what a valid input is 
+*for a put request of a session and instructor
+*/
+
+export const putSessionSchema = z.object({
+    ref: z
+      .string()
+      .trim()
+      .regex(/^[0-9]+$/, {
+        message: "Ref must be a number",
+      }),
+    classID: z
+      .string()
+      .trim()
+      .regex(/^[0-9]+$/, {
+        message: "Class ID must be a number",
+      }),
+    title: z.string().min(2).max(50),
+    start: z.string().datetime(),
+    end: z.string().datetime(),
+    instructor: z.array(z.string().min(2, {
+        message: 'Instructor name must be at least 2 characters long',
+    })),
+  });
+  
 // UPDATE sesssion
 export async function putSession(c) {
     const data = await c.req.json();
@@ -89,6 +115,15 @@ export async function putSession(c) {
     }
 }
 
+export const addInstructorSchema = z.object({
+    ref: z
+      .string()
+      .trim()
+      .regex(/^[0-9]+$/, {
+        message: "Ref must be a number",
+      }),
+    instructor: z.string().min(6).max(24),
+});
 
 // ADD instructor to the session
 export async function addInstructor(c) {
