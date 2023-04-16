@@ -66,7 +66,7 @@ export async function postClasses(c) {
 }
 
 export async function deleteClasses(c) {
-    const data = await c.req.json();
+    const data = await c.req.header("ref");
     try{
         const result = await faunaClient.query(
             Call(Function("deleteClass"), data.ref)
