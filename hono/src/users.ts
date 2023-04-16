@@ -15,6 +15,7 @@ import { zValidator } from "@hono/zod-validator";
 import * as jose from "jose";
 import { Bindings } from "hono/dist/types/types";
 import faunadb from "faunadb";
+import { retrieveUserReference } from "./classes";
 const { Call, Function, Paginate, Match, Index, Lambda, Get, Var, Map } =
     faunadb.query;
 
@@ -25,7 +26,6 @@ const faunaClient = new faunadb.Client({
 export async function getStudentsByClass(c) {
     try { 
         const class_id = await c.req.header("class");
-
         // try to query database:
         const result = await faunaClient.query(
             Call(Function("getStudentsByClass"), class_id)
@@ -51,13 +51,31 @@ export async function getInstructorsInClass(c) {
     }
 }
 
+export const addStudentuserSchema = z.object({
+    ref: z
+      .string()
+      .trim()
+      .regex(/^[0-9]+$/, {
+        message: "Ref must be a number",
+      }),
+    class_id: z
+        .string()
+        .trim()
+        .regex(/^[0-9]+$/, {
+            message: "Class ID must be a number",
+        }),
+  });
 
 export async function addStudentClassForUser(c) {
+    // get parameters:
     const data = await c.req.json();
-
+    // get user reference authorization:
+    const token = await c.req.header("Authorization");
+    const ref = await retrieveUserReference(token);
+    // query the database for update
     try {
         const result = await faunaClient.query(
-            Call(Function("addStudentClassForUser"), data.ref, data.class_id)
+            Call(Function("addStudentClassForUser"), ref, data.class_id)
         );
         return c.json(result);
     } catch(e) {
@@ -96,11 +114,32 @@ export async function createUser(c) {
     }
 }
 
+export const addInstructoruserSchema = z.object({
+    ref: z
+      .string()
+      .trim()
+      .regex(/^[0-9]+$/, {
+        message: "Ref must be a number",
+      }),
+    class_id: z
+        .string()
+        .trim()
+        .regex(/^[0-9]+$/, {
+            message: "Class ID must be a number",
+        }),
+    isAdmin: z.boolean(),
+  });
+
 export async function addInstructorClassForUser(c) {
+    // get parameters:
     const data = await c.req.json();
+    // get user reference authorization:
+    const token = await c.req.header("Authorization");
+    const ref = await retrieveUserReference(token);
+    // query the database:
     try{
         const result = await faunaClient.query(
-            Call(Function("addInstructorClassForUser"), data.ref, data.classID, data.isAdmin)
+            Call(Function("addInstructorClassForUser"), ref, data.classID, data.isAdmin)
         );
         return c.json(result);
     } catch(e) {
@@ -122,10 +161,13 @@ export async function getEstimatedWaitTime(c) {
 }
 
 export async function deleteUser(c) {
-    const data = await c.req.json();
+    // get user reference:
+    const token = await c.req.header("Authorization");
+    const ref = await retrieveUserReference(token);
+    // remove user:
     try{
         const result = await faunaClient.query(
-            Call(Function("deleteUser"), data.ref)
+            Call(Function("deleteUser"), ref)
         );
         return c.json(result);
     }

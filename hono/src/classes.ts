@@ -19,6 +19,20 @@ const fetch = require('node-fetch');
 const { Call, Function, Paginate, Match, Index, Lambda, Get, Var, Map } =
     faunadb.query;
 
+
+export async function retrieveUserReference(c) {
+    const response = await fetch("https://api.author.rakerman.com/api/auth0/user", {
+        method: "GET",
+        headers: { Authorization: c },
+    });
+    const data = await response.json();
+    // convert username to reference:
+    const temp2 = await faunaClient.query(
+        Call(Function("getUserByUsername"), data.profile.username)
+    );
+    return temp2.data[0];
+}
+
 const faunaClient = new faunadb.Client({
   secret: "fnAFBncQWJAASbTQJZ9EssnEJxiaKKln11deXGwR",
 });
@@ -28,16 +42,10 @@ const faunaClient = new faunadb.Client({
 export async function getClasses(c) {
     try { 
         const token = await c.req.header("Authorization");
-        const username = await c.req.header("username");
-        // get username from Auth0r:
-        const response = await fetch('https://api.author.rakerman.com/api/auth0/user', {
-            method: 'GET',
-            headers: { 'Authorization': token }
-        });
-        console.log(response.body);
+        const ref = await retrieveUserReference(token);
         // try to query database:
         const result = await faunaClient.query(
-            Call(Function("getStudentClasses"), username)
+            Call(Function("getStudentClasses"), ref)
         );
         // send response
         return c.json(result);

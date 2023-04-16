@@ -135,6 +135,16 @@ export async function createTicket(c) {
   }
 };
 
+/**
+* Sets limits for what a valid input is 
+*for a put request of a TA accepting a student
+*/
+
+export const acceptStudentTicketSchema = z.object({
+    ref: z.string(),
+    instructor: z.string().min(6).max(24),
+});
+
 // TA takes student in
 // @param:ref {string}  reference to Ticket
 // @param:instructor {string} TA username
