@@ -26,7 +26,7 @@ const faunaClient = new faunadb.Client({
 // @param:session {string} session reference string
 // @returns array of ticket objects
 export async function getActiveQueue(c) {
-    const session = await c.req.query();
+    const session = await c.req.header("session");
 
     try {
       const result = await faunaClient.query(
@@ -43,7 +43,7 @@ export async function getActiveQueue(c) {
 // @param:session {string}
 // @returns {array} array of student objects
 export async function getCurrentStudents(c) {
-  const session = await c.req.query();
+  const session = await c.req.header("session");
 
   try {
     const result = await faunaClient.query(
@@ -60,7 +60,9 @@ export async function getCurrentStudents(c) {
 // @param:instructor {string} username
 // @returns {object} student object
 export async function getMyCurrentStudent(c) {
-  const { session, instructor } = await c.req.json();
+  const session = await c.req.header("session");
+  const instructor = await c.req.header("instructor");
+
 
   try {
     const result = await faunaClient.query(
@@ -80,7 +82,12 @@ export async function getMyCurrentStudent(c) {
 // @param:time {string ISO} - check pinned messages for formatting time strings!
 // @returns {object} ticket object
 export async function createTicket(c) {
-  const { ref, username, sessionID, position, time } = await c.req.json();
+  const ref = await c.req.header("ref");
+  const username = await c.req.header("username");
+  const sessionID = await c.req.header("sessionID");
+  const position = await c.req.header("position");
+  const time = await c.req.header("time");
+
 
   try {
     const result = await faunaClient.query(
@@ -98,7 +105,9 @@ export async function createTicket(c) {
 // @param:instructor {string} TA username
 // @returns {object} ticket object
 export async function acceptStudentTicket(c) {
-  const { ref, instructor } = await c.req.json();
+  const ref = await c.req.header("ref");
+  const instructor = await c.req.header("instructor");
+
 
   try {
     const result = await faunaClient.query(
@@ -116,7 +125,7 @@ export async function acceptStudentTicket(c) {
 // @returns {object} ticket object
 export async function deleteTicket(c) {
 
-    const { ref } = await c.req.json();
+    const ref = await c.req.header("ref");
     
     try {
         const result = await faunaClient.query(
