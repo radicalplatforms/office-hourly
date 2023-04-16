@@ -15,6 +15,7 @@ import { zValidator } from "@hono/zod-validator";
 import * as jose from "jose";
 import { Bindings } from "hono/dist/types/types";
 import faunadb from "faunadb";
+import {getClasses, putClasses, postClasses, deleteClasses } from "./classes";
 const { Call, Function, Paginate, Match, Index, Lambda, Get, Var, Map } =
     faunadb.query;
 
@@ -27,5 +28,11 @@ const app = new Hono<{ Bindings: Bindings }>();
 app.use("*", logger());
 app.use("*", prettyJSON());
 app.get("/", (c) => c.text("OH! API v1.0.0"));
+
+// CLASSES REQUESTS:
+app.get('/classes', getClasses);
+app.put('/classes', putClasses);
+app.post('/classes', postClasses);
+app.delete('/classes', deleteClasses);
 
 export default app;

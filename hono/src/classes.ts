@@ -24,7 +24,7 @@ const faunaClient = new faunadb.Client({
 
 
 
-async function getClasses(c) {
+export async function getClasses(c) {
     try { 
         const { username } = await c.req.query();
 
@@ -40,7 +40,7 @@ async function getClasses(c) {
 }
 
 
-async function putClasses(c) {
+export async function putClasses(c) {
     const data = await c.req.json();
 
     try {
@@ -54,7 +54,7 @@ async function putClasses(c) {
 
 }
 
-async function postClasses(c) {
+export async function postClasses(c) {
     const data = await c.req.json();
     try{
         const result = await faunaClient.query(
@@ -66,7 +66,7 @@ async function postClasses(c) {
     }
 }
 
-async function deleteClasses(c) {
+export async function deleteClasses(c) {
     const data = await c.req.json();
     try{
         const result = await faunaClient.query(
