@@ -88,5 +88,3 @@ async function deleteUser(c) {
         return c.json(e);
     }
 }
-
-export default app;
