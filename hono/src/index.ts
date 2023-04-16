@@ -16,6 +16,9 @@ import * as jose from "jose";
 import { Bindings } from "hono/dist/types/types";
 import faunadb from "faunadb";
 import {getClasses, putClasses, postClasses, deleteClasses } from "./classes";
+import {getStudentClasses, addStudentClassForUser, createUser, addInstructorClassForUser, deleteUser} from "./users";
+import {getSession, postSession, putSession, addInstructor, deleteSession} from "./sessions";
+import {getActiveQueue, getCurrentStudents, getMyCurrentStudent, createTicket, acceptStudentTicket, deleteTicket} from "./tickets";
 const { Call, Function, Paginate, Match, Index, Lambda, Get, Var, Map } =
     faunadb.query;
 
@@ -34,5 +37,26 @@ app.get('/classes', getClasses);
 app.put('/classes', putClasses);
 app.post('/classes', postClasses);
 app.delete('/classes', deleteClasses);
+
+app.get('/users', getStudentClasses);
+app.put('/users/student', addStudentClassForUser);
+app.post('/users', createUser);
+app.put('/users/instructor', addInstructorClassForUser);
+app.delete('/users', deleteUser);
+
+app.get('/sessions', getSession);
+app.put('/sessions', putSession);
+app.post('/sessions', postSession);
+app.put('/sessions/instructor', addInstructor);
+app.delete('/sessions', deleteSession);
+
+app.get('/tickets',getActiveQueue);
+app.get('/tickets/students', getCurrentStudents);
+app.get('/tickets/current', getMyCurrentStudent);
+app.post('/tickets', createTicket);
+app.put('/tickets', acceptStudentTicket);
+app.delete('/tickets', deleteTicket);
+
+
 
 export default app;
