@@ -14,8 +14,10 @@ import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 import * as jose from "jose";
 import { Bindings } from "hono/dist/types/types";
+import { nanoid } from 'nanoid'; 
 import faunadb from "faunadb";
 const fetch = require('node-fetch');
+import { createUser } from "./users";
 const { Call, Function, Paginate, Match, Index, Lambda, Get, Var, Map } =
     faunadb.query;
 
@@ -30,7 +32,17 @@ export async function retrieveUserReference(c) {
     const temp2 = await faunaClient.query(
         Call(Function("getUserByUsername"), data.profile.username)
     );
-    return temp2.data[0];
+    if(temp2.data.size() == 0) {
+        // create user:
+        const req = {
+            ref: nanoid(6),
+            username: data.profile.username,
+            isAdmin: false
+        }
+        await createUser(req);
+    } else {
+        return temp2.data[0];
+    }
 }
 
 const faunaClient = new faunadb.Client({

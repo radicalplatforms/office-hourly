@@ -93,12 +93,7 @@ export const userSchema = z.object({
       }),
     username: z
       .string()
-      .trim()
-      .regex(/^[a-zA-Z0-9_]+$/, {
-        message: "Username can only contain letters, numbers, and underscores",
-      })
-      .min(6, { message: "Username must be 6-24 characters long" })
-      .max(24, { message: "Username must be 6-24 characters long" }),
+      .trim(),
     isAdmin: z.boolean(),
   });
 

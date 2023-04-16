@@ -58,8 +58,8 @@ export const sessionSchema = z.object({
     start: z.string().datetime(),
     end: z.string().datetime(),
     instructor: z.array(z.string().min(2, {
-      message: 'Instructor name must be at least 2 characters long',
-    })),
+        message: 'Instructor name must be at least 1 character long',
+    }).max(24, { message: "Instructor name must be 1-24 characters long" })),
 });
 
 // CREATE a new session
@@ -97,9 +97,12 @@ export const putSessionSchema = z.object({
     title: z.string().min(2).max(50),
     start: z.string().datetime(),
     end: z.string().datetime(),
-    instructor: z.array(z.string().min(2, {
-        message: 'Instructor name must be at least 2 characters long',
-    })),
+    instructor: z.array(z.string()
+    .min(2, {
+        message: 'Instructor name must be at least 1 character long',
+    })
+    .max(24, {
+        message: "Instructor name must be 1-24 characters long" })),
   });
   
 // UPDATE sesssion
@@ -122,7 +125,11 @@ export const addInstructorSchema = z.object({
       .regex(/^[0-9]+$/, {
         message: "Ref must be a number",
       }),
-    instructor: z.string().min(6).max(24),
+    instructor: z.string().min(2, {
+        message: 'Instructor name must be at least 1 character long',
+    })
+    .max(24, {
+        message: "Instructor name must be 1-24 characters long" }),
 });
 
 // ADD instructor to the session
