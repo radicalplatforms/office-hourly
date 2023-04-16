@@ -25,7 +25,7 @@ const faunaClient = new faunadb.Client({
 // Fetches all students waiting on TA
 // @param:session {string} session reference string
 // @returns array of ticket objects
-async function getActiveQueue(c) {
+export async function getActiveQueue(c) {
     const session = await c.req.query();
 
     try {
@@ -42,7 +42,7 @@ async function getActiveQueue(c) {
 // Fetches all students currently with TAs
 // @param:session {string}
 // @returns {array} array of student objects
-async function getCurrentStudents(c) {
+export async function getCurrentStudents(c) {
   const session = await c.req.query();
 
   try {
@@ -59,7 +59,7 @@ async function getCurrentStudents(c) {
 // @param:session {string}
 // @param:instructor {string} username
 // @returns {object} student object
-async function getMyCurrentStudent(c) {
+export async function getMyCurrentStudent(c) {
   const { session, instructor } = await c.req.json();
 
   try {
@@ -79,7 +79,7 @@ async function getMyCurrentStudent(c) {
 // @param:position {int}
 // @param:time {string ISO} - check pinned messages for formatting time strings!
 // @returns {object} ticket object
-async function createTicket(c) {
+export async function createTicket(c) {
   const { ref, username, sessionID, position, time } = await c.req.json();
 
   try {
@@ -97,7 +97,7 @@ async function createTicket(c) {
 // @param:ref {string}  reference to Ticket
 // @param:instructor {string} TA username
 // @returns {object} ticket object
-async function acceptStudentTicket (c) {
+export async function acceptStudentTicket (c) {
   const { ref, instructor } = await c.req.json();
 
   try {
@@ -114,7 +114,7 @@ async function acceptStudentTicket (c) {
 // Deletes a ticket by reference
 // @param:query ref - unique id of the ticket to delete
 // @returns {object} ticket object
-async function deleteTicket(c) {
+export async function deleteTicket(c) {
 
     const { ref } = await c.req.json();
     
