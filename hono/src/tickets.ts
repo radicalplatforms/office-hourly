@@ -22,11 +22,6 @@ const faunaClient = new faunadb.Client({
   secret: "fnAFBncQWJAASbTQJZ9EssnEJxiaKKln11deXGwR",
 });
 
-const app = new Hono();
-
-app.use("*", logger());
-app.use("*", prettyJSON());
-
 // Fetches all students waiting on TA
 // @param:session {string} session reference string
 async function getActiveQueue(c) {
