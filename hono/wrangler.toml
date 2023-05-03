@@ -2,3 +2,14 @@ name = "oh-hono"
 main = "src/index.ts"
 account_id = "287572e2291030d8c5e360fcc593a16b"
 compatibility_date = "2023-01-01"
+vars = { ENVIRONMENT = "dev" }
+
+[durable_objects]
+bindings = [{name = "COURSE", class_name = "Course"}]
+
+[[migrations]]
+tag = "v0.0.1" # Should be unique for each entry
+new_classes = ["Course"]
+
+[env.production]
+vars = { ENVIRONMENT = "production" }
